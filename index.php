@@ -1,12 +1,23 @@
 <?php
 $dir = __DIR__ . '/pictures';
-$last_update_file = __DIR__ . '/last_update.txt';
+$favicon_path = __DIR__ . '/favicon.ico';
+$favicon_url = 'https://raw.githubusercontent.com/iamstrawberry/willi-api/main/favicon.ico';
+$last_update_file = __DIR__ . '/data.meow';
 $repo_api_url = 'https://api.github.com/repos/iamstrawberry/willi-api/contents/pictures';
 $repo_path = 'https://raw.githubusercontent.com/iamstrawberry/willi-api/main/pictures';
 
+// Favicon check
+if (!file_exists($favicon_path)) {
+  $favicon_data = file_get_contents($favicon_url);
+  file_put_contents($favicon_path, $favicon_data);
+}
+
 // Check if the image directory exists
 if (!file_exists($dir) || !is_dir($dir)) {
-  die('Error: Image directory not found');
+  // Create the directory
+  if (!mkdir($dir, 0777, true)) {
+    die('Error: Failed to create image directory');
+  }
 }
 
 // Check if it's been less than 30 minutes since the last update
